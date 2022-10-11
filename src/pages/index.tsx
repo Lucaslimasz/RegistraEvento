@@ -1,11 +1,38 @@
-import type { NextPage } from 'next'
+import { api } from '@config/api';
+import { stripe } from '@config/stripe';
+import { getStripeJs } from '@config/stripe-js';
+import type { GetServerSideProps } from 'next'
+import { FormEvent } from 'react';
 
 import * as S from './styles';
 
-const Home: NextPage = () => {
+interface IProduct {
+  product: {
+    priceId: string,
+    amount: string, 
+  }
+}
+
+const Home = ({product}: IProduct) => {
+  
+  const handleSubscribe = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    try {
+      const response = await api.post('/subscribe');
+
+      const { sessionId } = response.data;
+
+      const stripe = await getStripeJs();
+
+      await stripe?.redirectToCheckout({sessionId})
+    } catch (err) {
+      alert(err)
+    }
+  }
+
   return (
     <>
-      <img src="assets/background.png" alt="background" className='background'/>
+      <img src="assets/background.png" alt="background" className='background' />
       <S.Container>
         <div>
           <S.Tag>Homens de Verdade</S.Tag>
@@ -24,7 +51,7 @@ const Home: NextPage = () => {
             </li>
             <li>
               <img src="assets/icons/dollar.svg" alt="dollar" />
-              <span>R$ 30,00</span>
+              <span>{product.amount}</span>
             </li>
           </ul>
 
@@ -61,17 +88,37 @@ const Home: NextPage = () => {
           </div>
 
         </div>
-        <form>
+        <form onSubmit={handleSubscribe}>
           <input placeholder='Nome completo' />
           <input placeholder='E-mail' />
           <input placeholder='Whatsapp' />
           <input placeholder='Cidade' />
           <input placeholder='Congregação' />
-          <input type='submit' value='Inscrever-se' />
+          <input type='submit' value='Inscrever-se'/>
         </form>
       </S.Container>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  const price: any = await stripe.prices.retrieve('price_1Lq0gyBGniSjo37yWKVX4VFc', {
+    expand: ['product']
+  });
+
+  const currentPrice = price.unit_amount / 100
+
+  const product = {
+    priceId: price.id,
+    amount: currentPrice.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}), 
+  }
+
+  return {
+    props: {
+      product
+    }
+  }
 }
 
 export default Home

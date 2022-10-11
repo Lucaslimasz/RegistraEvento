@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding: 5rem;
+  padding: 5rem 3rem;
 
   display: flex;
   justify-content: space-between;
@@ -19,8 +19,8 @@ export const Container = styled.div`
 
   > ul {
     display: flex;
-
-    margin: 4.375rem 0;
+    gap: 2.5rem;
+    margin: 4rem 0;
     
     li {
       display: flex;
@@ -30,10 +30,6 @@ export const Container = styled.div`
         margin-left: 1rem;
         font-weight: 600;
         font-size: 0.875rem;
-      }
-
-      &+li {
-        margin-left: 2.5rem;
       }
     }
   }
@@ -47,7 +43,7 @@ export const Container = styled.div`
     >h3 {
       font-weight: 800;
       font-size: 2rem;
-      margin-top: 2rem;
+      margin-top: 4rem;
     }
 
     ul {
@@ -55,11 +51,11 @@ export const Container = styled.div`
       justify-content: space-between;
       flex-wrap: wrap;
       margin-top: 2.25rem;
+      gap: 1.5rem;
 
       li {
         display: flex;
         flex-direction: column;
-        margin: 0 1.625rem 1.125rem 0;
         img {
           width: 3.125rem;
         }
@@ -96,6 +92,23 @@ export const Container = styled.div`
         background: var(--green);
         font-weight: 700;
         font-size: 1.125rem;
+      }
+    }
+  }
+
+  @media (max-width: 900px){
+    padding: 3rem 1.5rem;
+    flex-direction: column;
+
+    >div {
+      >ul {
+        flex-wrap: wrap;
+      }
+
+      >div {
+        h3 {
+          margin-bottom: 1.25rem;
+        }
       }
     }
   }
