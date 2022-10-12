@@ -5,9 +5,11 @@ export const Container = styled.div`
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   > div {
     max-width: 35rem;
+    margin: auto;
     > h1 {
       font-size: 2.25rem;
     }
@@ -77,6 +79,8 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+    max-width: 550px;
+    margin: auto;
 
     input {
       padding: 1.75rem 2rem;
@@ -86,12 +90,6 @@ export const Container = styled.div`
       border-radius: 0.5rem;
       &+input {
         margin-top: 1rem;
-      }
-      &+input[type="submit"] {
-        margin-top: 1.875rem;
-        background: var(--green);
-        font-weight: 700;
-        font-size: 1.125rem;
       }
     }
   }

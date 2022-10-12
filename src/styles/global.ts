@@ -28,6 +28,7 @@ body {
     position: absolute;
     width: 100%;
     z-index: -1;
+    opacity: 0.5;
   }
 }
   

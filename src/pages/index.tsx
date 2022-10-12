@@ -1,33 +1,31 @@
-import { api } from '@config/api';
-import { stripe } from '@config/stripe';
-import { getStripeJs } from '@config/stripe-js';
+import { ChangeEvent, useEffect, useState } from 'react'
+
 import type { GetServerSideProps } from 'next'
-import { FormEvent } from 'react';
+import { stripe } from '@config/stripe';
+
+import ButtonSubscribe from '@components/ButtonSubscribe'
 
 import * as S from './styles';
 
 interface IProduct {
   product: {
     priceId: string,
-    amount: string, 
+    amount: string,
   }
 }
 
-const Home = ({product}: IProduct) => {
-  
-  const handleSubscribe = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    try {
-      const response = await api.post('/subscribe');
+export interface IUser {
+  name: string;
+  email: string;
+  whatsapp: string;
+  congregation: string;
+}
 
-      const { sessionId } = response.data;
+const Home = ({ product }: IProduct) => {
+  const [user, setUser] = useState<IUser>({} as IUser)
 
-      const stripe = await getStripeJs();
-
-      await stripe?.redirectToCheckout({sessionId})
-    } catch (err) {
-      alert(err)
-    }
+  const handleUser = (event: ChangeEvent<HTMLInputElement>) => {
+    setUser(prevState => ({ ...prevState, [event.target.name]: event.target.value }));
   }
 
   return (
@@ -88,13 +86,32 @@ const Home = ({product}: IProduct) => {
           </div>
 
         </div>
-        <form onSubmit={handleSubscribe}>
-          <input placeholder='Nome completo' />
-          <input placeholder='E-mail' />
-          <input placeholder='Whatsapp' />
-          <input placeholder='Cidade' />
-          <input placeholder='Congregação' />
-          <input type='submit' value='Inscrever-se'/>
+        <form>
+          <input
+            placeholder='Nome completo'
+            name='name'
+            onChange={
+              (e: ChangeEvent<HTMLInputElement>) => handleUser(e)}
+          />
+          <input
+            placeholder='E-mail'
+            name='email'
+            onChange={
+              (e: ChangeEvent<HTMLInputElement>) => handleUser(e)}
+          />
+          <input
+            placeholder='Whatsapp'
+            name='whatsapp'
+            onChange={
+              (e: ChangeEvent<HTMLInputElement>) => handleUser(e)}
+          />
+          <input
+            placeholder='Congregação'
+            name='congregation'
+            onChange={
+              (e: ChangeEvent<HTMLInputElement>) => handleUser(e)}
+          />
+          <ButtonSubscribe user={user} />
         </form>
       </S.Container>
     </>
@@ -111,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const product = {
     priceId: price.id,
-    amount: currentPrice.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}), 
+    amount: currentPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
   }
 
   return {

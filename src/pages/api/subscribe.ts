@@ -2,10 +2,11 @@ import { stripe } from "@config/stripe";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const {email} = req.body
   if(req.method === 'POST'){
     
     const stripeCustomer: any = await stripe.customers.create({
-      email: 'id.lucas@outlook.com.br'
+      email
     })
 
     const stripeCheckoutSession = await stripe.checkout.sessions.create({
@@ -17,8 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       ],
       mode: 'payment',
       allow_promotion_codes: true,
-      success_url: 'https://www.facebook.com.br',
-      cancel_url: 'https://www.google.com.br'
+      success_url: 'http://localhost:3000/sucess',
+      cancel_url: 'http://localhost:3000'
     })
 
     return res.status(200).json({ sessionId: stripeCheckoutSession.id })
