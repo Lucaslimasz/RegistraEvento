@@ -3,6 +3,7 @@ import React from 'react';
 import * as S from '@styles/sucess';
 
 import LinkCopy from '@components/LinkCopy';
+import CardSubscribe from '@components/CardSubscribe';
 
 const Sucess = () => {
   return (
@@ -33,7 +34,7 @@ const Sucess = () => {
           </ul>
         </div>
       </div>
-      <img src="assets/cards.png" alt="cards" />
+      <CardSubscribe />
     </S.Container>
   );
 }

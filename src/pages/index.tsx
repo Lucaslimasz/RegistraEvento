@@ -30,7 +30,6 @@ const Home = ({ product }: IProduct) => {
 
   return (
     <>
-      <img src="assets/background.png" alt="background" className='background' />
       <S.Container>
         <div>
           <S.Tag>Homens de Verdade</S.Tag>
