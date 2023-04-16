@@ -1,0 +1,37 @@
+{
+  "conference": [
+    {
+      "title": "Conferência Profética",
+      "date": "de 07 à 09 de setembro",
+      "location": "Nova Aliança Agape João Pessoa"
+    }
+  ],
+  "ministers": [
+    {
+      "id": "1",
+      "minister": "Pr. Raimundo Nonato",
+      "photo": "/assets/ministrante.png"
+    },
+    {
+      "id": "1",
+      "minister": "Pr. Raimundo Nonato",
+      "photo": "/assets/ministrante.png"
+    },
+    {
+      "id": "1",
+      "minister": "Pr. Raimundo Nonato",
+      "photo": "/assets/ministrante.png"
+    },
+    {
+      "id": "1",
+      "minister": "Pr. Raimundo Nonato",
+      "photo": "/assets/ministrante.png"
+    },
+    {
+      "id": "1",
+      "minister": "Pr. Raimundo Nonato",
+      "photo": "/assets/ministrante.png"
+    }
+  ]
+
+}

@@ -1,7 +1,6 @@
 import { api } from '@config/api';
 import { getStripeJs } from '@config/stripe-js';
-import { setCookie } from 'nookies';
-import React, { FormEvent, useEffect } from 'react';
+import React, { FormEvent } from 'react';
 
 import * as S from './styles';
 
@@ -21,8 +20,7 @@ const ButtonSubscribe = ({user}: IUser) => {
 
     if(user.email && user.name && user.whatsapp && user.congregation){
       try {
-        setCookie(null, 'user' , `${JSON.stringify(user)}`)
-        const response = await api.post('/subscribe', {email: user.email});
+        const response = await api.post('/subscribe', user);
   
         const { sessionId } = response.data;
   

@@ -36,10 +36,12 @@ export const Container = styled.section`
       display: flex;
       align-items: center;
 
-      span {
+      b {
+        display: block;
         margin-left: 1rem;
         font-weight: 600;
         font-size: 0.875rem;
+        word-break: break-word;
       }
     }
 

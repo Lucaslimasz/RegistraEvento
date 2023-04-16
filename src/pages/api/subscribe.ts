@@ -1,60 +1,44 @@
-import { fauna } from "@config/fauna";
+/* eslint-disable import/no-anonymous-default-export */
 import { stripe } from "@config/stripe";
-import { query as q } from 'faunadb';
 import { NextApiRequest, NextApiResponse } from "next";
-
-interface User {
-  ref: {
-    id: string;
-  }
-}
+import connect from "@config/mongo-db";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email } = req.body
+  const { db } = await connect();
+  const { name, email, whatsapp, congregation } = req.body;
 
-  if(req.method === 'POST'){
+  if (req.method === "POST") {
+    const response = await db.collection("homensdeverdades").findOne({ email });
 
-    const user = await fauna.query(
-      q.Get(
-        q.Collection('users')
-      )
-    )
+    if (response) {
+      console.log("email já existe");
+      return res.status(409).json({ error: "Email already exists" });
+    }
 
-    console.log(user)
-    
-    const stripeCustomer: any = await stripe.customers.create({
-      email
-    })
+    const user = await db
+      .collection("homensdeverdades")
+      .insertOne({ name, email, whatsapp, congregation });
 
-    await fauna.query(
-      q.Update(
-        q.Ref(q.Collection('users'), user.ref.id),
-        {
-          data: { 
-            stripe_customer_id: stripeCustomer.id,
-          }
-        }
-      )
-    )
+      console.log()
 
-    // const stripeCheckoutSession = await stripe.checkout.sessions.create({
-    //   customer: stripeCustomer.id,
-    //   payment_method_types: ['card'],
-    //   billing_address_collection: 'auto',
-    //   line_items: [
-    //     {price: 'price_1Lq0gyBGniSjo37yWKVX4VFc', quantity: 1}
-    //   ],
-    //   mode: 'payment',
-    //   allow_promotion_codes: true,
-    //   success_url: 'http://localhost:3000/sucess',
-    //   cancel_url: 'http://localhost:3000'
-    // })
+    const stripeCostumer = await stripe.customers.create({
+      email,
+    });
 
-    return res.status(200)
-    // .json({ sessionId: stripeCheckoutSession.id })
+    const stripeCheckoutSession = await stripe.checkout.sessions.create({
+      customer: stripeCostumer.id,
+      payment_method_types: ["card"],
+      billing_address_collection: "auto",
+      line_items: [{ price: "price_1Lq0gyBGniSjo37yWKVX4VFc", quantity: 1 }],
+      mode: "payment",
+      allow_promotion_codes: true,
+      success_url: `http://localhost:3001/registration/${user.insertedId.toString()}`,
+      cancel_url: "http://localhost:3001",
+    });
 
+    return res.status(200).json({ sessionId: stripeCheckoutSession.id });
   } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method not allowed');
+    res.setHeader("Allow", "POST");
+    res.status(405).end("Method not allowed");
   }
-}
+};
