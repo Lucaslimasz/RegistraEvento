@@ -32,8 +32,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       line_items: [{ price: "price_1Lq0gyBGniSjo37yWKVX4VFc", quantity: 1 }],
       mode: "payment",
       allow_promotion_codes: true,
-      success_url: `http://localhost:3001/registration/${user.insertedId.toString()}`,
-      cancel_url: "http://localhost:3001",
+      success_url: `https://conferenciaprofetica.vercel.app//registration/${user.insertedId.toString()}`,
+      cancel_url: "https://conferenciaprofetica.vercel.app/",
     });
 
     return res.status(200).json({ sessionId: stripeCheckoutSession.id });
