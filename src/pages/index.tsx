@@ -8,7 +8,7 @@ import ButtonSubscribe from "@components/ButtonSubscribe";
 
 import conference from "../../event.json";
 
-import * as S from "./styles";
+import * as S from "@styles/home";
 
 interface IProduct {
   product: {
